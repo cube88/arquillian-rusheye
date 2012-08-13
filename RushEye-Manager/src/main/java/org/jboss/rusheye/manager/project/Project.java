@@ -76,8 +76,8 @@ public class Project extends ProjectBase {
      * @param patternName name of pattern
      * @return matching test case.
      */
-    public TestCase findTest(String testName, String patternName) {
-        return root.findTest("Test Cases." + testName + "." + patternName);
+    public TestCase findTest(String caseName,String testName, String patternName) {
+        return root.findTest("Test Cases."+caseName+"." + testName + "." + patternName);
     }
 
     /**
@@ -148,7 +148,7 @@ public class Project extends ProjectBase {
         props.setProperty("file-storage-directory", "tmp");
         props.setProperty("result-output-file", "result.xml");
 
-        if (!maskPath.equals(""))
+        if (maskPath!=null && !maskPath.equals(""))
             props.setProperty("masks-directory", maskPath);
 
         Main.interfaceFrame.getStatFrame().setVisible(true);

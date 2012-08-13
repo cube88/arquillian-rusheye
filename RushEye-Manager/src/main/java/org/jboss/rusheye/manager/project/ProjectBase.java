@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.jboss.rusheye.manager.project.observable.Observer;
 import org.jboss.rusheye.parser.ParserThread;
+import org.jboss.rusheye.suite.Case;
 import org.jboss.rusheye.suite.VisualSuite;
 
 /**
@@ -19,6 +20,7 @@ public abstract class ProjectBase implements Observer {
 
     protected TestCase root;
     protected TestCase currentCase;
+    private Case currentSuiteCase;
     protected String patternPath = "";
     protected String samplesPath = "";
     protected String maskPath = "";
@@ -112,5 +114,13 @@ public abstract class ProjectBase implements Observer {
 
     public void setParsing(boolean parsing) {
         this.parsing = parsing;
+    }
+
+    public Case getCurrentSuiteCase() {
+        return currentSuiteCase;
+    }
+
+    public void setCurrentSuiteCase(Case currentSuiteCase) {
+        this.currentSuiteCase = currentSuiteCase;
     }
 }

@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -109,6 +111,7 @@ public class ManagerParser extends Parser implements Observed {
                     }
                     if (o instanceof Case) {
                         Case case1 = (Case) o;
+                        Main.mainProject.setCurrentSuiteCase(case1);
                         Case caseWrapped = ConfigurationCompiler.wrap(case1, visualSuite.getGlobalConfiguration());
                         handler.getContext().setCurrentConfiguration(caseWrapped);
                         handler.getContext().setCurrentCase(caseWrapped);
@@ -121,16 +124,7 @@ public class ManagerParser extends Parser implements Observed {
                             }
                             handler.getContext().invokeListeners().onTestReady(testWrapped);
 
-                            for (Pattern pattern : testWrapped.getPatterns()) {
-                                TestCase managerTest = Main.mainProject.findTest(testWrapped.getName(), pattern.getName());
-                                managerTest.setConclusion(pattern.getConclusion());
-                                statistics.addValue(pattern.getConclusion(), 1);
 
-                                Main.mainProject.setCurrentCase(managerTest);
-                                Main.interfaceFrame.getProjectFrame().updateIcons();
-
-                                this.notifyObservers();
-                            }
                         }
                         handler.getContext().invokeListeners().onCaseReady(caseWrapped);
 
@@ -216,6 +210,12 @@ public class ManagerParser extends Parser implements Observed {
             throw handleParsingException(e, e.getLinkedException());
         }
 
+        Collections.sort(visualSuite.getCases(), new Comparator<Case>() {
+            @Override
+            public int compare(Case o1, Case o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
         return visualSuite;
     }
 
@@ -259,7 +259,7 @@ public class ManagerParser extends Parser implements Observed {
         list.remove(o);
     }
 
-    private void notifyObservers() {
+    public void notifyObservers() {
         for (Observer o : list) {
             o.update(this);
         }

@@ -6,21 +6,23 @@ package org.jboss.rusheye.parser;
 
 import org.jboss.rusheye.internal.Instantiator;
 import org.jboss.rusheye.manager.Main;
-import org.jboss.rusheye.manager.gui.view.image.ImagePool;
 import org.jboss.rusheye.manager.project.TestCase;
 import org.jboss.rusheye.result.ResultCollectorAdapter;
 import org.jboss.rusheye.result.ResultEvaluator;
 import org.jboss.rusheye.result.ResultStatistics;
 import org.jboss.rusheye.result.ResultStorage;
 import org.jboss.rusheye.result.writer.ResultWriter;
-import org.jboss.rusheye.suite.*;
+import org.jboss.rusheye.suite.Case;
+import org.jboss.rusheye.suite.ComparisonResult;
+import org.jboss.rusheye.suite.Pattern;
+import org.jboss.rusheye.suite.Properties;
+import org.jboss.rusheye.suite.ResultConclusion;
+import org.jboss.rusheye.suite.Test;
+import org.jboss.rusheye.suite.VisualSuite;
 
 /**
- * Custom result collector used by Manager. It is not really different from
- * ResultCollectorImpl, but it takes into consideration changes from manager
- * project tree.
  *
- * @author Jakub D.
+ * @author hcube
  */
 public class ManagerResultCollector extends ResultCollectorAdapter {
 
@@ -62,16 +64,23 @@ public class ManagerResultCollector extends ResultCollectorAdapter {
             pattern.setOutput(location);
         }
 
-
-
         pattern.setComparisonResult(comparisonResult);
+        pattern.setConclusion(conclusion);
 
-        TestCase managerTest = Main.mainProject.findTest(test.getName(), pattern.getName());
+        System.out.println(conclusion);
+        TestCase managerTest = Main.mainProject.findTest(Main.mainProject.getCurrentSuiteCase().getName(), test.getName(), pattern.getName());
         if (managerTest.getConclusion() != null && managerTest.getConclusion() != ResultConclusion.NOT_TESTED)
             pattern.setConclusion(managerTest.getConclusion());
-        else
+        else {
             pattern.setConclusion(conclusion);
+            managerTest.setConclusion(conclusion);
+        }
 
+        Main.mainProject.getParser().getStatistics().addValue(pattern.getConclusion(), 1);
+        Main.mainProject.getParser().notifyObservers();
+
+        Main.mainProject.setCurrentCase(managerTest);
+        Main.interfaceFrame.getProjectFrame().updateIcons();
 
         if (comparisonResult.getDiffImage() != null) {
             comparisonResult.getDiffImage().flush();
@@ -84,13 +93,12 @@ public class ManagerResultCollector extends ResultCollectorAdapter {
     public void onTestCompleted(Test test) {
         statistics.onTestCompleted(test);
     }
-    
+
     @Override
     public void onCaseCompleted(Case case1) {
         writer.write(case1);
         statistics.onCaseCompleted(case1);
     }
-
 
     @Override
     public void onSuiteCompleted(VisualSuite visualSuite) {
