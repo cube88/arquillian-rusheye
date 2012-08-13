@@ -174,30 +174,6 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
         projectTree.scrollPathToVisible(path);
     }
 
-    /**
-     * Allows us to travel between cases in tree.
-     *
-     * @param offset how far we search next case.
-     */
-    private void findNeighbour(int offset) {
-        TreeNodeImpl node = (TreeNodeImpl) projectTree.getLastSelectedPathComponent();
-        TreePath parentPath = projectTree.getSelectionPath().getParentPath();
-
-        NodeList list = (NodeList) node.getParent().children();
-        for (int i = 0; i < list.size(); ++i) {
-            if (list.get(i).equals(node)) {
-                if (offset > 0 && i < list.size() - offset) {
-                    projectTree.setSelectionPath(parentPath.pathByAddingChild(list.get(i + offset)));
-                    break;
-                }
-                if (offset < 0 && i >= offset) {
-                    projectTree.setSelectionPath(parentPath.pathByAddingChild(list.get(i + offset)));
-                    break;
-                }
-            }
-        }
-    }
-
     public void createMaskList() {
         List<Mask> masks = Main.mainProject.getSuiteDescriptor().getGlobalConfiguration().getMasks();
         DefaultListModel model = new DefaultListModel();
@@ -862,7 +838,7 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
      * @param evt event triggering method
      */
     private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
-        findNeighbour(1);
+        projectTree.setSelectionRow(projectTree.getSelectionRows()[0]+1);
     }//GEN-LAST:event_nextButtonActionPerformed
 
     /**
@@ -871,7 +847,7 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
      * @param evt event triggering method
      */
     private void prevButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prevButtonActionPerformed
-        findNeighbour(-1);
+        projectTree.setSelectionRow(projectTree.getSelectionRows()[0]-1);
     }//GEN-LAST:event_prevButtonActionPerformed
 
     private void runAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runAllButtonActionPerformed
@@ -995,8 +971,7 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
             putTestIntoView();
             createMaskTree();
             allowDrawButton.setText("Disable draw");
-        }
-        else {
+        } else {
             Main.interfaceFrame.setView(InterfaceFrame.SINGLE);
             putTestIntoView();
             allowDrawButton.setText("Allow draw");
@@ -1006,7 +981,6 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
     private void addSuiteMaskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSuiteMaskButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_addSuiteMaskButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addMaskButton;
     private javax.swing.JButton addSuiteMaskButton;
