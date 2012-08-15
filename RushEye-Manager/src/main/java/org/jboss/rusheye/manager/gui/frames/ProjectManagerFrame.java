@@ -134,26 +134,24 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
         TestCase node = (TestCase) projectTree.getLastSelectedPathComponent();
         if (node == null)
             return;
+        
+        Main.mainProject.setCurrentCase(node);
 
         if (node.isLeaf()) {
-            TestCase current = Main.mainProject.findTest(node.getPath());
-            Main.mainProject.setCurrentCase(current);
-
             Main.interfaceFrame.clean();
             JPanel panel = Main.interfaceFrame.getMainPanel();
 
             switch (Main.interfaceFrame.getView()) {
                 case InterfaceFrame.SINGLE:
-                    panel.add(new SingleView(current));
+                    panel.add(new SingleView(node));
                     break;
                 case InterfaceFrame.DOUBLE:
-                    panel.add(new DoubleView(current));
+                    panel.add(new DoubleView(node));
                     break;
                 case InterfaceFrame.MASK:
-                    panel.add(new MaskView(current));
+                    panel.add(new MaskView(node));
                     break;
             }
-
             panel.validate();
         }
     }
@@ -163,9 +161,11 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
      */
     public void updateIcons() {
         String info = "";
+        if(Main.mainProject.getCurrentCase().isLeaf()){
         info += ((TestCase) Main.mainProject.getCurrentCase().getParent()).getName() + "\n";
         info += Main.mainProject.getCurrentCase().getName() + "\n";
         info += Main.mainProject.getCurrentCase().getConclusion().toString();
+        }
         infoTextArea.setText(info);
         Main.mainProject.getCurrentCase().setChecked(true);
         TreePath path = projectTree.getSelectionPath();
@@ -190,10 +190,6 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
                     projectTree.setSelectionPath(parentPath.pathByAddingChild(list.get(i + offset)));
                     break;
                 }
-                //if (offset > 0 && i >= list.size() - offset) {
-                //    findNeighbour((TreeNodeImpl)node.getParent(),parentPath.getParentPath(),1);
-                //    break;
-                //}
                 if (offset < 0 && i >= offset) {
                     projectTree.setSelectionPath(parentPath.pathByAddingChild(list.get(i + offset)));
                     break;
@@ -857,28 +853,15 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
      * @param evt event triggering method
      */
     private void posButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_posButtonActionPerformed
-        ResultConclusion last = Main.mainProject.getCurrentCase().getConclusion();
-        Main.mainProject.getStatistics().addValue(last, -1);
+        //ResultConclusion last = Main.mainProject.getCurrentCase().getConclusion();
+        //Main.mainProject.getStatistics().addValue(last, -1);
 
-        Main.mainProject.getCurrentCase().setConclusion(ResultConclusion.PERCEPTUALLY_SAME);
-        Main.mainProject.getStatistics().addValue(ResultConclusion.PERCEPTUALLY_SAME, 1);
+       // Main.mainProject.getCurrentCase().setConclusion(ResultConclusion.PERCEPTUALLY_SAME);
+       // Main.mainProject.getStatistics().addValue(ResultConclusion.PERCEPTUALLY_SAME, 1);
+        Main.mainProject.getCurrentCase().setResultRecursive(ResultConclusion.PERCEPTUALLY_SAME);
+        
         Main.interfaceFrame.getStatFrame().update(Main.mainProject);
 
-        String result = Main.mainProject.getResult();
-        // TODO It's a hack
-        if (result != null) {
-            String regexp = Main.mainProject.getCurrentCase().getFilename() + "\" result=\"" + last;
-            String newString = Main.mainProject.getCurrentCase().getFilename() + "\" result=\"" + Main.mainProject.getCurrentCase().getConclusion();
-
-            result = result.replace(regexp, newString);
-            try {
-                PrintWriter out = new PrintWriter(Main.mainProject.getResultDescriptor());
-                out.println(result);
-                out.close();
-            } catch (FileNotFoundException ex) {
-                ex.printStackTrace();
-            }
-        }
         updateIcons();
         updateCheckBoxes(Main.mainProject.getStatistics());
     }//GEN-LAST:event_posButtonActionPerformed
@@ -1013,7 +996,10 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_removeSuiteMaskButtonActionPerformed
 
     private void posButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_posButton1ActionPerformed
-        // TODO add your handling code here:
+        Main.mainProject.getCurrentCase().unsetResultRecursive();
+        
+        updateIcons();
+        updateCheckBoxes(Main.mainProject.getStatistics());
     }//GEN-LAST:event_posButton1ActionPerformed
 
     private void allowDrawButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allowDrawButtonActionPerformed

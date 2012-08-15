@@ -5,25 +5,18 @@
 package org.jboss.rusheye.manager.project;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.ArrayList;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jboss.rusheye.core.DefaultImageComparator;
 import org.jboss.rusheye.manager.Main;
-import org.jboss.rusheye.manager.exception.ManagerException;
 import org.jboss.rusheye.manager.gui.view.image.ImagePool;
 import org.jboss.rusheye.manager.project.tree.TreeNodeImpl;
 import org.jboss.rusheye.parser.DefaultConfiguration;
-import org.jboss.rusheye.parser.ManagerParser;
-import org.jboss.rusheye.parser.ManagerSaver;
 import org.jboss.rusheye.result.ResultEvaluator;
 import org.jboss.rusheye.suite.ComparisonResult;
 import org.jboss.rusheye.suite.Configuration;
 import org.jboss.rusheye.suite.ResultConclusion;
-import org.jboss.rusheye.suite.Test;
-import org.jboss.rusheye.suite.VisualSuite;
 
 /**
  * Extension of TreeNodeImpl. It contains data regarding tests, like result
@@ -68,29 +61,29 @@ public class TestCase extends TreeNodeImpl {
      * conclusion.
      */
     public void loadDiff() {
-            //Configuration configuration = Main.mainProject.getSuiteDescriptor().getGlobalConfiguration();
+        //Configuration configuration = Main.mainProject.getSuiteDescriptor().getGlobalConfiguration();
 
-            Configuration configuration = new DefaultConfiguration();
-            //configuration.getPerception().setOnePixelTreshold(defaultConf.getPerception().getOnePixelTreshold());
-            //configuration.getPerception().setGlobalDifferenceTreshold(defaultConf.getPerception().getGlobalDifferenceTreshold());
-            //configuration.getPerception().setGlobalDifferenceAmount(defaultConf.getPerception().getGlobalDifferenceAmount());
-            // System.out.println(configuration.getPerception().getOnePixelTreshold() + " " +configuration2.getPerception().getOnePixelTreshold());
-            ComparisonResult result = new DefaultImageComparator().compare(getImage(ImagePool.PATTERN), getImage(ImagePool.SAMPLE), configuration.getPerception(),
-                   configuration.getMasks());
+        Configuration configuration = new DefaultConfiguration();
+        //configuration.getPerception().setOnePixelTreshold(defaultConf.getPerception().getOnePixelTreshold());
+        //configuration.getPerception().setGlobalDifferenceTreshold(defaultConf.getPerception().getGlobalDifferenceTreshold());
+        //configuration.getPerception().setGlobalDifferenceAmount(defaultConf.getPerception().getGlobalDifferenceAmount());
+        // System.out.println(configuration.getPerception().getOnePixelTreshold() + " " +configuration2.getPerception().getOnePixelTreshold());
+        ComparisonResult result = new DefaultImageComparator().compare(getImage(ImagePool.PATTERN), getImage(ImagePool.SAMPLE), configuration.getPerception(),
+                configuration.getMasks());
 
-            if (conclusion == null || conclusion == ResultConclusion.NOT_TESTED) {
-                conclusion = new ResultEvaluator().evaluate(configuration.getPerception(), result);
-                Main.mainProject.getStatistics().addValue(conclusion, 1);
-                Main.mainProject.getStatistics().addValue(ResultConclusion.NOT_TESTED, -1);
+        if (conclusion == null || conclusion == ResultConclusion.NOT_TESTED) {
+            conclusion = new ResultEvaluator().evaluate(configuration.getPerception(), result);
+            Main.mainProject.getStatistics().addValue(conclusion, 1);
+            Main.mainProject.getStatistics().addValue(ResultConclusion.NOT_TESTED, -1);
 
-                Main.interfaceFrame.getStatFrame().update(Main.mainProject);
-                Main.interfaceFrame.getProjectFrame().updateCheckBoxes(Main.mainProject.getStatistics());
-            }
-            BufferedImage diff = result.getDiffImage();
+            Main.interfaceFrame.getStatFrame().update(Main.mainProject);
+            Main.interfaceFrame.getProjectFrame().updateCheckBoxes(Main.mainProject.getStatistics());
+        }
+        BufferedImage diff = result.getDiffImage();
 
-            pool.put(ImagePool.DIFF, diff);
+        pool.put(ImagePool.DIFF, diff);
 
-            //Main.mainProject.parseSinglePattern(this);
+        //Main.mainProject.parseSinglePattern(this);
 
     }
 
@@ -167,6 +160,55 @@ public class TestCase extends TreeNodeImpl {
 
     public void setFilename(String filename) {
         this.filename = filename;
+    }
+
+    public void setResultRecursive(ResultConclusion con) {
+        System.out.print(this.getName() + " ");
+        if (this.isLeaf()) {
+            System.out.println("leaf");
+            ResultConclusion last = conclusion;
+            
+            Main.mainProject.getStatistics().addValue(this.conclusion, -1);
+            Main.mainProject.getStatistics().addValue(con, 1);
+
+            this.conclusion = con;
+            this.checked = true;
+
+            String result = Main.mainProject.getResult();
+            // TODO It's a hack
+            if (result != null) {
+                String regexp = Main.mainProject.getCurrentCase().getFilename() + "\" result=\"" + last;
+                String newString = Main.mainProject.getCurrentCase().getFilename() + "\" result=\"" + Main.mainProject.getCurrentCase().getConclusion();
+
+                result = result.replace(regexp, newString);
+                try {
+                    PrintWriter out = new PrintWriter(Main.mainProject.getResultDescriptor());
+                    out.println(result);
+                    out.close();
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        } else {
+            System.out.println();
+            for (int i = 0; i < this.getChildCount(); ++i)
+                ((TestCase) this.getChildAt(i)).setResultRecursive(con);
+        }
+    }
+
+    public void unsetResultRecursive() {
+        System.out.print(this.getName() + " ");
+        if (this.isLeaf()) {
+            Main.mainProject.getStatistics().addValue(conclusion, -1);
+            Main.mainProject.getStatistics().addValue(ResultConclusion.NOT_TESTED, 1);
+            conclusion = ResultConclusion.NOT_TESTED;
+            this.checked = false;
+            System.out.println("leaf");
+        } else {
+            System.out.println();
+            for (int i = 0; i < this.getChildCount(); ++i)
+                ((TestCase) this.getChildAt(i)).unsetResultRecursive();
+        }
     }
 
     /**

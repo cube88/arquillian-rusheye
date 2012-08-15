@@ -62,22 +62,12 @@ public class Project extends ProjectBase {
     /**
      * Method that search recursively through tests tree.
      *
-     * @param name path representation of test.
-     * @return matching test case.
-     */
-    public TestCase findTest(String name) {
-        return root.findTest(name);
-    }
-
-    /**
-     * Method that search recursively through tests tree.
-     *
      * @param testName name of test
      * @param patternName name of pattern
      * @return matching test case.
      */
-    public TestCase findTest(String caseName,String testName, String patternName) {
-        return root.findTest("Test Cases."+caseName+"." + testName + "." + patternName);
+    public TestCase findTest(String caseName, String testName, String patternName) {
+        return root.findTest("Test Cases." + caseName + "." + testName + "." + patternName);
     }
 
     /**
@@ -148,7 +138,7 @@ public class Project extends ProjectBase {
         props.setProperty("file-storage-directory", "tmp");
         props.setProperty("result-output-file", "result.xml");
 
-        if (maskPath!=null && !maskPath.equals(""))
+        if (maskPath != null && !maskPath.equals(""))
             props.setProperty("masks-directory", maskPath);
 
         Main.interfaceFrame.getStatFrame().setVisible(true);
@@ -163,5 +153,4 @@ public class Project extends ProjectBase {
 
         Main.mainProject.setResultDescriptor(new File("result.xml"));
     }
-
 }
