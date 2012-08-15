@@ -4,7 +4,7 @@
  */
 package org.jboss.rusheye.manager.gui.view.mask;
 
-import org.jboss.rusheye.manager.gui.view.mask.MaskType;
+import org.jboss.rusheye.manager.gui.view.mask.ManagerMaskType;
 import org.jboss.rusheye.manager.gui.view.mask.Shape;
 import org.jboss.rusheye.manager.project.tree.TreeNodeImpl;
 
@@ -15,7 +15,7 @@ import org.jboss.rusheye.manager.project.tree.TreeNodeImpl;
 public class MaskCase extends TreeNodeImpl {
 
     private Shape shape;
-    private MaskType type;
+    private ManagerMaskType type;
 
     public Shape getShape() {
         return shape;
@@ -25,11 +25,11 @@ public class MaskCase extends TreeNodeImpl {
         this.shape = shape;
     }
 
-    public MaskType getType() {
+    public ManagerMaskType getType() {
         return type;
     }
 
-    public void setType(MaskType type) {
+    public void setType(ManagerMaskType type) {
         this.type = type;
     }
     

@@ -5,7 +5,7 @@
 package org.jboss.rusheye.manager.project;
 
 import org.jboss.rusheye.manager.gui.view.mask.MaskCase;
-import org.jboss.rusheye.manager.gui.view.mask.MaskType;
+import org.jboss.rusheye.manager.gui.view.mask.ManagerMaskType;
 
 /**
  *
@@ -22,7 +22,7 @@ public class MaskManager {
         
         MaskCase newCase = new MaskCase();
         newCase.setName("mask-" + (root.getChildCount() + 1));
-        newCase.setType(MaskType.SELECTIVE_ALPHA);
+        newCase.setType(ManagerMaskType.SELECTIVE_ALPHA);
 
         root.addChild(newCase);
         

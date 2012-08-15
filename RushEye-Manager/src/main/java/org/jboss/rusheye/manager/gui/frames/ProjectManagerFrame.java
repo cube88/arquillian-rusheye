@@ -4,11 +4,11 @@
  */
 package org.jboss.rusheye.manager.gui.frames;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
@@ -17,6 +17,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+import org.apache.commons.lang.ArrayUtils;
 import org.jboss.rusheye.manager.Main;
 import org.jboss.rusheye.manager.exception.ManagerException;
 import org.jboss.rusheye.manager.gui.CustomTreeRenderer;
@@ -24,16 +25,19 @@ import org.jboss.rusheye.manager.gui.charts.RushEyeStatistics;
 import org.jboss.rusheye.manager.gui.view.DoubleView;
 import org.jboss.rusheye.manager.gui.view.MaskView;
 import org.jboss.rusheye.manager.gui.view.SingleView;
+import org.jboss.rusheye.manager.gui.view.mask.ManagerMaskType;
 import org.jboss.rusheye.manager.gui.view.mask.MaskCase;
-import org.jboss.rusheye.manager.gui.view.mask.MaskType;
 import org.jboss.rusheye.manager.project.Project;
 import org.jboss.rusheye.manager.project.TestCase;
 import org.jboss.rusheye.manager.project.tree.NodeList;
 import org.jboss.rusheye.manager.project.tree.TreeNodeImpl;
-import org.jboss.rusheye.parser.ManagerSaver;
+import org.jboss.rusheye.manager.utils.FileChooserUtils;
+import org.jboss.rusheye.suite.HorizontalAlign;
 import org.jboss.rusheye.suite.Mask;
+import org.jboss.rusheye.suite.MaskType;
 import org.jboss.rusheye.suite.Perception;
 import org.jboss.rusheye.suite.ResultConclusion;
+import org.jboss.rusheye.suite.VerticalAlign;
 
 /**
  * Project Manager Frame. One of 2 main frames for manager. Here we display tree
@@ -134,7 +138,7 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
         TestCase node = (TestCase) projectTree.getLastSelectedPathComponent();
         if (node == null)
             return;
-        
+
         Main.mainProject.setCurrentCase(node);
 
         if (node.isLeaf()) {
@@ -161,10 +165,10 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
      */
     public void updateIcons() {
         String info = "";
-        if(Main.mainProject.getCurrentCase().isLeaf()){
-        info += ((TestCase) Main.mainProject.getCurrentCase().getParent()).getName() + "\n";
-        info += Main.mainProject.getCurrentCase().getName() + "\n";
-        info += Main.mainProject.getCurrentCase().getConclusion().toString();
+        if (Main.mainProject.getCurrentCase().isLeaf()) {
+            info += ((TestCase) Main.mainProject.getCurrentCase().getParent()).getName() + "\n";
+            info += Main.mainProject.getCurrentCase().getName() + "\n";
+            info += Main.mainProject.getCurrentCase().getConclusion().toString();
         }
         infoTextArea.setText(info);
         Main.mainProject.getCurrentCase().setChecked(true);
@@ -856,10 +860,10 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
         //ResultConclusion last = Main.mainProject.getCurrentCase().getConclusion();
         //Main.mainProject.getStatistics().addValue(last, -1);
 
-       // Main.mainProject.getCurrentCase().setConclusion(ResultConclusion.PERCEPTUALLY_SAME);
-       // Main.mainProject.getStatistics().addValue(ResultConclusion.PERCEPTUALLY_SAME, 1);
+        // Main.mainProject.getCurrentCase().setConclusion(ResultConclusion.PERCEPTUALLY_SAME);
+        // Main.mainProject.getStatistics().addValue(ResultConclusion.PERCEPTUALLY_SAME, 1);
         Main.mainProject.getCurrentCase().setResultRecursive(ResultConclusion.PERCEPTUALLY_SAME);
-        
+
         Main.interfaceFrame.getStatFrame().update(Main.mainProject);
 
         updateIcons();
@@ -872,7 +876,7 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
      * @param evt event triggering method
      */
     private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
-        projectTree.setSelectionRow(projectTree.getSelectionRows()[0]+1);
+        projectTree.setSelectionRow(projectTree.getSelectionRows()[0] + 1);
     }//GEN-LAST:event_nextButtonActionPerformed
 
     /**
@@ -881,7 +885,7 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
      * @param evt event triggering method
      */
     private void prevButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prevButtonActionPerformed
-        projectTree.setSelectionRow(projectTree.getSelectionRows()[0]+1);
+        projectTree.setSelectionRow(projectTree.getSelectionRows()[0] + 1);
     }//GEN-LAST:event_prevButtonActionPerformed
 
     private void runAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runAllButtonActionPerformed
@@ -942,7 +946,7 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
         MaskCase root = Main.mainProject.getMaskManager().getRoot();
         MaskCase newCase = new MaskCase();
         newCase.setName("mask-" + (root.getChildCount() + 1));
-        newCase.setType(MaskType.SELECTIVE_ALPHA);
+        newCase.setType(ManagerMaskType.SELECTIVE_ALPHA);
 
         root.addChild(newCase);
 
@@ -997,7 +1001,7 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
 
     private void posButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_posButton1ActionPerformed
         Main.mainProject.getCurrentCase().unsetResultRecursive();
-        
+
         updateIcons();
         updateCheckBoxes(Main.mainProject.getStatistics());
     }//GEN-LAST:event_posButton1ActionPerformed
@@ -1016,7 +1020,54 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_allowDrawButtonActionPerformed
 
     private void addSuiteMaskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSuiteMaskButtonActionPerformed
-        // TODO add your handling code here:
+        JFileChooser fc = FileChooserUtils.fileChooser();
+        File tmp = FileChooserUtils.chooseFile(fc, this);
+        if (tmp != null) {
+            Mask mask = new Mask();
+
+            String path = tmp.getAbsolutePath();
+
+            String addr[] = path.split("/");
+            String maskStr = addr[addr.length - 2];
+            String fileStr = addr[addr.length - 1];
+
+            System.out.println(path + " " + maskStr + " " + fileStr);
+
+            for (MaskType maskType : MaskType.values()) {
+                if (maskStr.equals("masks-" + maskType.value())) {
+                    mask.setType(maskType);
+                    System.out.println(maskType);
+                    break;
+                }
+            }
+            
+            System.out.println(fileStr);
+            String id = fileStr.split("\\.")[0];
+            String source = path.substring(Main.mainProject.getMaskPath().length()+1);
+            
+            String info = fileStr.split("\\.")[0].split("--")[1];
+            String[] infoTokens = info.split("-");
+
+            mask.setId(id);
+            mask.setSource(source);
+            
+            System.out.println(id + " " + source);
+
+            for (String alignment : infoTokens) {
+                System.out.println(alignment);
+                if(alignment.equals("top"))
+                    mask.setVerticalAlign(VerticalAlign.TOP);
+                if(alignment.equals("bottom"))
+                    mask.setVerticalAlign(VerticalAlign.BOTTOM);
+                if(alignment.equals("left"))
+                    mask.setHorizontalAlign(HorizontalAlign.LEFT);
+                if(alignment.equals("right"))
+                    mask.setHorizontalAlign(HorizontalAlign.RIGHT);
+            }
+            
+            Main.mainProject.getSuiteDescriptor().getGlobalConfiguration().getMasks().add(mask);
+            createMaskList();
+        }
     }//GEN-LAST:event_addSuiteMaskButtonActionPerformed
 
     private void prevButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prevButton1ActionPerformed
@@ -1026,7 +1077,6 @@ public class ProjectManagerFrame extends javax.swing.JFrame {
     private void nextButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButton1ActionPerformed
         findNeighbour(1);
     }//GEN-LAST:event_nextButton1ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addMaskButton;
     private javax.swing.JButton addSuiteMaskButton;

@@ -8,6 +8,6 @@ package org.jboss.rusheye.manager.gui.view.mask;
  *
  * @author hcube
  */
-public enum MaskType {
+public enum ManagerMaskType {
     SELECTIVE_ALPHA;
 }
