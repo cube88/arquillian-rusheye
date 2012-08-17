@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.List;
 import org.jboss.rusheye.core.DefaultImageComparator;
+import org.jboss.rusheye.core.ManagerImageComparator;
 import org.jboss.rusheye.manager.Main;
 import org.jboss.rusheye.manager.gui.view.image.ImagePool;
 import org.jboss.rusheye.manager.project.tree.TreeNodeImpl;
@@ -16,6 +17,7 @@ import org.jboss.rusheye.parser.DefaultConfiguration;
 import org.jboss.rusheye.result.ResultEvaluator;
 import org.jboss.rusheye.suite.ComparisonResult;
 import org.jboss.rusheye.suite.Configuration;
+import org.jboss.rusheye.suite.Mask;
 import org.jboss.rusheye.suite.ResultConclusion;
 
 /**
@@ -61,16 +63,25 @@ public class TestCase extends TreeNodeImpl {
      * conclusion.
      */
     public void loadDiff() {
-        //Configuration configuration = Main.mainProject.getSuiteDescriptor().getGlobalConfiguration();
+        Configuration gc = Main.mainProject.getSuiteDescriptor().getGlobalConfiguration();
 
         Configuration configuration = new DefaultConfiguration();
         //configuration.getPerception().setOnePixelTreshold(defaultConf.getPerception().getOnePixelTreshold());
         //configuration.getPerception().setGlobalDifferenceTreshold(defaultConf.getPerception().getGlobalDifferenceTreshold());
         //configuration.getPerception().setGlobalDifferenceAmount(defaultConf.getPerception().getGlobalDifferenceAmount());
         // System.out.println(configuration.getPerception().getOnePixelTreshold() + " " +configuration2.getPerception().getOnePixelTreshold());
-        ComparisonResult result = new DefaultImageComparator().compare(getImage(ImagePool.PATTERN), getImage(ImagePool.SAMPLE), configuration.getPerception(),
-                configuration.getMasks());
-
+        
+        //for(Mask mask : gc.getMasks()){
+        //    mask.setSource(Main.mainProject.getMaskPath() + "/" + mask.getSource());
+        //    System.out.println(mask.getSource());
+        //}
+        ComparisonResult result = new ManagerImageComparator().compare(getImage(ImagePool.PATTERN), getImage(ImagePool.SAMPLE), configuration.getPerception(),
+                gc.getMasks());
+        
+        //for(Mask mask : gc.getMasks()){
+        //    mask.setSource(mask.getSource().substring(Main.mainProject.getMaskPath().length() + 1));
+        //    System.out.println(mask.getSource());
+        //}
         if (conclusion == null || conclusion == ResultConclusion.NOT_TESTED) {
             conclusion = new ResultEvaluator().evaluate(configuration.getPerception(), result);
             Main.mainProject.getStatistics().addValue(conclusion, 1);
@@ -82,8 +93,6 @@ public class TestCase extends TreeNodeImpl {
         BufferedImage diff = result.getDiffImage();
 
         pool.put(ImagePool.DIFF, diff);
-
-        //Main.mainProject.parseSinglePattern(this);
 
     }
 
