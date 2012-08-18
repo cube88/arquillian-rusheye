@@ -46,6 +46,9 @@ public class WizardFrame extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         masksButton = new javax.swing.JButton();
         loadButton = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        resultsField = new javax.swing.JTextField();
+        resultButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Load suite");
@@ -93,6 +96,15 @@ public class WizardFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabel5.setText("Results :");
+
+        resultButton.setText("Set");
+        resultButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resultButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -120,11 +132,16 @@ public class WizardFrame extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(resultsField)
+                        .addGap(18, 18, 18)
+                        .addComponent(resultButton, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3)
-                            .addComponent(jLabel4))
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -155,9 +172,15 @@ public class WizardFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(masksField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(masksButton))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(resultsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(resultButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addComponent(loadButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -204,20 +227,36 @@ public class WizardFrame extends javax.swing.JFrame {
         project.setMaskPath(masksField.getText());
         Main.mainProject = project;
         
+        
+        if(!resultsField.getText().equals(""))
+            project.getParser().loadResults(new File(resultsField.getText()));
+        
         Main.interfaceFrame.initialize(project);
         
         this.dispose();
     }//GEN-LAST:event_loadButtonActionPerformed
+
+    private void resultButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resultButtonActionPerformed
+        JFileChooser fc = FileChooserUtils.fileChooser();
+        File tmp = FileChooserUtils.chooseFile(fc, this);
+        if (tmp != null) {
+            resultsField.setText(tmp.getAbsolutePath());
+        }
+    }//GEN-LAST:event_resultButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JButton loadButton;
     private javax.swing.JButton masksButton;
     private javax.swing.JTextField masksField;
     private javax.swing.JButton patternsButton;
     private javax.swing.JTextField patternsField;
+    private javax.swing.JButton resultButton;
+    private javax.swing.JTextField resultsField;
     private javax.swing.JButton samplesButton;
     private javax.swing.JTextField samplesField;
     private javax.swing.JButton suiteButton;

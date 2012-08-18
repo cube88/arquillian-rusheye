@@ -6,6 +6,7 @@ package org.jboss.rusheye.parser;
 
 import com.ctc.wstx.exc.WstxParsingException;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,6 +16,9 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.StreamFilter;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -32,6 +36,10 @@ import org.jboss.rusheye.manager.project.TestCase;
 import org.jboss.rusheye.manager.project.observable.Observed;
 import org.jboss.rusheye.manager.project.observable.Observer;
 import org.jboss.rusheye.suite.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Custom parser used by Manager. Besides normal parsing it creates tree of
@@ -217,6 +225,59 @@ public class ManagerParser extends Parser implements Observed {
             }
         });
         return visualSuite;
+    }
+
+    public void loadResults(File file) {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+        try {
+
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document dom = db.parse(file);
+
+            Element node = dom.getDocumentElement();
+
+            NodeList cases = node.getElementsByTagName("case");
+            System.out.println(cases.getLength());
+
+            if (cases != null && cases.getLength() > 0) {
+                for (int i = 0; i < cases.getLength(); i++) {
+
+                    Element case1 = (Element) cases.item(i);
+
+                    NodeList tests = case1.getElementsByTagName("test");
+                    System.out.println(tests.getLength());
+                    
+                    if (tests != null && tests.getLength() > 0) {
+                        for (int k = 0; k < tests.getLength(); k++) {
+                            Element test = (Element) tests.item(k);
+
+                            NodeList patterns = test.getElementsByTagName("pattern");
+                            System.out.println(patterns.getLength());
+
+                            if (patterns != null && patterns.getLength() > 0) {
+                                for (int l = 0; l < patterns.getLength(); l++) {
+                                    Element pattern = (Element) patterns.item(l);
+                                    
+                                    System.out.println(case1.getAttribute("name") + " " +test.getAttribute("name") + " " + pattern.getAttribute("name") + " "+ pattern.getAttribute("result"));
+                                    TestCase tc = Main.mainProject.findTest(case1.getAttribute("name"), test.getAttribute("name"), pattern.getAttribute("name"));
+                                    tc.setConclusion(ResultConclusion.valueOf(pattern.getAttribute("result")));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        } catch (ParserConfigurationException pce) {
+            pce.printStackTrace();
+        } catch (SAXException se) {
+            se.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        
+        notifyObservers();
     }
 
     public TestCase parseSuiteToManagerCases(VisualSuite suite) {

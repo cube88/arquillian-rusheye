@@ -27,6 +27,7 @@ public class ManagerParserTest extends TestCase {
     protected void tearDown() throws Exception {
         super.tearDown();
     }
+    
 
     /**
      * Test of parseFileToManagerCases method, of class ManagerParser.
