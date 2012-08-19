@@ -17,7 +17,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import org.apache.commons.lang.ArrayUtils;
 import org.jboss.rusheye.manager.Main;
 import org.jboss.rusheye.manager.exception.ManagerException;
 import org.jboss.rusheye.manager.gui.CustomTreeRenderer;

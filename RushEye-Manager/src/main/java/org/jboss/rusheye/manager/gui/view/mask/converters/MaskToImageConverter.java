@@ -4,20 +4,16 @@
  */
 package org.jboss.rusheye.manager.gui.view.mask.converters;
 
-import org.jboss.rusheye.manager.gui.view.mask.converters.MaskConverter;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import org.jboss.rusheye.manager.gui.view.mask.MaskCase;
 
 /**
- *
- * @author hcube
+ * Converter that saves managers mask as png image with proper name.
+ * @author Jakub D.
  */
 public class MaskToImageConverter extends MaskConverter {
 

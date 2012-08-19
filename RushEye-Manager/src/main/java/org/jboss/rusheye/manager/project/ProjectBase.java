@@ -13,8 +13,8 @@ import org.jboss.rusheye.suite.Case;
 import org.jboss.rusheye.suite.VisualSuite;
 
 /**
- *
- * @author hcube
+ * Base class for project. Contains all fields and getters/setters.
+ * @author Jakub D.
  */
 public abstract class ProjectBase implements Observer {
 

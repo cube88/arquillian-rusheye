@@ -21,8 +21,10 @@ import org.jboss.rusheye.suite.Test;
 import org.jboss.rusheye.suite.VisualSuite;
 
 /**
+ * Manager result collector that takes into account changes we made in project
+ * manager tree.
  *
- * @author hcube
+ * @author Jakub D.
  */
 public class ManagerResultCollector extends ResultCollectorAdapter {
 

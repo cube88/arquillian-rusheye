@@ -4,12 +4,10 @@
  */
 package org.jboss.rusheye.manager.gui.view.mask;
 
-import org.jboss.rusheye.manager.gui.view.mask.ManagerMaskType;
-import org.jboss.rusheye.manager.gui.view.mask.Shape;
 import org.jboss.rusheye.manager.project.tree.TreeNodeImpl;
 
 /**
- *
+ * Mask that can be displayed in mask manager tree.
  * @author Jakub D.
  */
 public class MaskCase extends TreeNodeImpl {

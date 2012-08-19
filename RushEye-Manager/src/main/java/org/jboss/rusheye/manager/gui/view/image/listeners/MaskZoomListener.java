@@ -5,19 +5,18 @@
 package org.jboss.rusheye.manager.gui.view.image.listeners;
 
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import org.jboss.rusheye.manager.Main;
 import org.jboss.rusheye.manager.gui.view.image.ImageView;
 import org.jboss.rusheye.manager.gui.view.image.MaskedScrollableImage;
-import org.jboss.rusheye.manager.gui.view.mask.Rect;
 import org.jboss.rusheye.manager.gui.view.mask.MaskCase;
+import org.jboss.rusheye.manager.gui.view.mask.Rect;
 
 /**
+ * Mouse listener that allows to draw rectangles (masks).
  *
- * @author cube
+ * @author Jakub D.
  */
 public class MaskZoomListener extends ZoomListener implements MouseMotionListener {
 
@@ -42,7 +41,7 @@ public class MaskZoomListener extends ZoomListener implements MouseMotionListene
         if (inside) {
             drawing = true;
 
-            start = new Point((int)(e.getX()/pic.getScale()), (int)(e.getY()/pic.getScale()));
+            start = new Point((int) (e.getX() / pic.getScale()), (int) (e.getY() / pic.getScale()));
 
             currentMask = new MaskCase();
             currentMask.setShape(new Rect(start, start));
@@ -55,7 +54,7 @@ public class MaskZoomListener extends ZoomListener implements MouseMotionListene
     public void mouseReleased(MouseEvent e) {
         drawing = false;
 
-        stop = new Point((int)(e.getX()/pic.getScale()), (int)(e.getY()/pic.getScale()));
+        stop = new Point((int) (e.getX() / pic.getScale()), (int) (e.getY() / pic.getScale()));
 
         currentMask.setShape(calculateRect());
 
@@ -67,7 +66,7 @@ public class MaskZoomListener extends ZoomListener implements MouseMotionListene
     public void mouseDragged(MouseEvent e) {
         if (drawing) {
 
-            stop = new Point((int)(e.getX()/pic.getScale()), (int)(e.getY()/pic.getScale()));
+            stop = new Point((int) (e.getX() / pic.getScale()), (int) (e.getY() / pic.getScale()));
 
             currentMask.setShape(calculateRect());
 
@@ -92,6 +91,7 @@ public class MaskZoomListener extends ZoomListener implements MouseMotionListene
         return null;
     }
 
+    @Override
     public void mouseMoved(MouseEvent e) {
     }
 }

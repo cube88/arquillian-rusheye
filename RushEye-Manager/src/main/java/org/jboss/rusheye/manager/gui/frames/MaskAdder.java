@@ -5,21 +5,21 @@
 package org.jboss.rusheye.manager.gui.frames;
 
 import java.io.File;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import org.jboss.rusheye.manager.Main;
 import org.jboss.rusheye.manager.gui.view.mask.MaskCase;
 import org.jboss.rusheye.manager.gui.view.mask.converters.MaskConverter;
 import org.jboss.rusheye.manager.gui.view.mask.converters.MaskToImageConverter;
-import org.jboss.rusheye.manager.utils.FileChooserUtils;
 import org.jboss.rusheye.suite.HorizontalAlign;
 import org.jboss.rusheye.suite.Mask;
 import org.jboss.rusheye.suite.MaskType;
 import org.jboss.rusheye.suite.VerticalAlign;
 
 /**
+ * Frame for adding new mask, defined in mask editor. Here we can set aligns,
+ * type and name.
  *
- * @author hcube
+ * @author Jakub D.
  */
 public class MaskAdder extends javax.swing.JFrame {
 

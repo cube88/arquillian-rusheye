@@ -13,8 +13,10 @@ import java.net.URL;
 import org.jboss.rusheye.suite.ResultConclusion;
 
 /**
+ * Implementation of ChartRetriever interface. It uses charts4j lib to generate
+ * Image with charts based on RushEyeStatistics instance.
  *
- * @author hcube
+ * @author Jakub D.
  */
 public class ChartRetrieverImpl implements ChartRetriever {
 
@@ -31,7 +33,7 @@ public class ChartRetrieverImpl implements ChartRetriever {
     @Override
     public Image generateChart() {
         try {
-            if(statistics.calculateSum()==0){
+            if (statistics.calculateSum() == 0) {
                 return new BufferedImage(600, 450, BufferedImage.TYPE_INT_ARGB);
             }
             Plot plot = Plots.newPlot(DataUtil.scaleWithinRange(0, statistics.calculateSum(), statistics.getValues()));

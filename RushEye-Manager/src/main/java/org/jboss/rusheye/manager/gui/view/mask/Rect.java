@@ -9,8 +9,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 /**
- *
- * @author cube
+ * Implementation of Shape interface that draws Rectangle.
+ * @author Jakub D.
  */
 public class Rect implements Shape {
 

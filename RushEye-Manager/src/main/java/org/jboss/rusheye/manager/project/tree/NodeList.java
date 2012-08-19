@@ -4,7 +4,6 @@
  */
 package org.jboss.rusheye.manager.project.tree;
 
-import org.jboss.rusheye.manager.project.tree.TreeNodeImpl;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -16,10 +15,12 @@ import java.util.Enumeration;
  */
 public class NodeList extends ArrayList<TreeNodeImpl> implements Enumeration<TreeNodeImpl> {
 
+    @Override
     public boolean hasMoreElements() {
         return this.iterator().hasNext();
     }
 
+    @Override
     public TreeNodeImpl nextElement() {
         return this.iterator().next();
     }

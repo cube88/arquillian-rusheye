@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.List;
-import org.jboss.rusheye.core.DefaultImageComparator;
 import org.jboss.rusheye.core.ManagerImageComparator;
 import org.jboss.rusheye.manager.Main;
 import org.jboss.rusheye.manager.gui.view.image.ImagePool;
@@ -17,7 +16,6 @@ import org.jboss.rusheye.parser.DefaultConfiguration;
 import org.jboss.rusheye.result.ResultEvaluator;
 import org.jboss.rusheye.suite.ComparisonResult;
 import org.jboss.rusheye.suite.Configuration;
-import org.jboss.rusheye.suite.Mask;
 import org.jboss.rusheye.suite.ResultConclusion;
 
 /**
@@ -66,22 +64,10 @@ public class TestCase extends TreeNodeImpl {
         Configuration gc = Main.mainProject.getSuiteDescriptor().getGlobalConfiguration();
 
         Configuration configuration = new DefaultConfiguration();
-        //configuration.getPerception().setOnePixelTreshold(defaultConf.getPerception().getOnePixelTreshold());
-        //configuration.getPerception().setGlobalDifferenceTreshold(defaultConf.getPerception().getGlobalDifferenceTreshold());
-        //configuration.getPerception().setGlobalDifferenceAmount(defaultConf.getPerception().getGlobalDifferenceAmount());
-        // System.out.println(configuration.getPerception().getOnePixelTreshold() + " " +configuration2.getPerception().getOnePixelTreshold());
-        
-        //for(Mask mask : gc.getMasks()){
-        //    mask.setSource(Main.mainProject.getMaskPath() + "/" + mask.getSource());
-        //    System.out.println(mask.getSource());
-        //}
+
         ComparisonResult result = new ManagerImageComparator().compare(getImage(ImagePool.PATTERN), getImage(ImagePool.SAMPLE), configuration.getPerception(),
                 gc.getMasks());
-        
-        //for(Mask mask : gc.getMasks()){
-        //    mask.setSource(mask.getSource().substring(Main.mainProject.getMaskPath().length() + 1));
-        //    System.out.println(mask.getSource());
-        //}
+
         if (conclusion == null || conclusion == ResultConclusion.NOT_TESTED) {
             conclusion = new ResultEvaluator().evaluate(configuration.getPerception(), result);
             Main.mainProject.getStatistics().addValue(conclusion, 1);
@@ -171,12 +157,15 @@ public class TestCase extends TreeNodeImpl {
         this.filename = filename;
     }
 
+    /**
+     * Sets results for all leafs in this tree branch.
+     */
     public void setResultRecursive(ResultConclusion con) {
         System.out.print(this.getName() + " ");
         if (this.isLeaf()) {
             System.out.println("leaf");
             ResultConclusion last = conclusion;
-            
+
             Main.mainProject.getStatistics().addValue(this.conclusion, -1);
             Main.mainProject.getStatistics().addValue(con, 1);
 
@@ -205,6 +194,10 @@ public class TestCase extends TreeNodeImpl {
         }
     }
 
+    /**
+     * Sets results in this tree brach as not tested and allows them to be
+     * overwritten by parser.
+     */
     public void unsetResultRecursive() {
         System.out.print(this.getName() + " ");
         if (this.isLeaf()) {
@@ -279,15 +272,4 @@ public class TestCase extends TreeNodeImpl {
             ((TestCase) this.getAllChildren().get(i)).setAllVisible();
     }
 
-    public int countLeafs() {
-        int sum = 0;
-        for (int i = 0; i < this.getChildCount(); ++i) {
-            TestCase child = (TestCase) this.getChildAt(i);
-            if (child.isLeaf())
-                sum++;
-            else
-                sum += child.countLeafs();
-        }
-        return sum;
-    }
 }

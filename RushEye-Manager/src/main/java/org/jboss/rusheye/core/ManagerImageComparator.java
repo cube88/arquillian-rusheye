@@ -8,16 +8,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import org.jboss.rusheye.comparison.ImageComparator;
-import org.jboss.rusheye.core.ColorDistance;
-import org.jboss.rusheye.core.ColorDistanceLAB;
-import org.jboss.rusheye.core.ColorModelRGBA;
 import org.jboss.rusheye.manager.Main;
 import org.jboss.rusheye.manager.gui.view.image.ImagePool;
 import org.jboss.rusheye.suite.Area;
@@ -30,8 +22,8 @@ import org.jboss.rusheye.suite.Rectangle;
 import org.jboss.rusheye.suite.VerticalAlign;
 
 /**
- *
- * @author hcube
+ * Manager version of ImageComparator class. Used in ad hoc comparison
+ * @author Jakub D.
  */
 public class ManagerImageComparator implements ImageComparator {
 

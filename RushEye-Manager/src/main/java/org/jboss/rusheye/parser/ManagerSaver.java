@@ -4,14 +4,9 @@
  */
 package org.jboss.rusheye.parser;
 
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.Comparator;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -21,7 +16,6 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.jboss.rusheye.RushEye;
 import org.jboss.rusheye.parser.listener.CompareListener;
-import org.jboss.rusheye.result.collector.ResultCollectorImpl;
 import org.jboss.rusheye.result.statistics.OverallStatistics;
 import org.jboss.rusheye.result.storage.FileStorage;
 import org.jboss.rusheye.result.writer.FileResultWriter;
@@ -34,8 +28,11 @@ import org.jboss.rusheye.suite.Test;
 import org.jboss.rusheye.suite.VisualSuite;
 
 /**
+ * ManagerSaver saves VisualSuite instance to xml file. It's structure is
+ * similar to Crawl from RushEye core, but instead of crawling through
+ * directories it crawls through VisualSuite instance.
  *
- * @author hcube
+ * @author Jakub D.
  */
 public class ManagerSaver {
 
@@ -148,7 +145,7 @@ public class ManagerSaver {
 
             Element case1 = root.addElement(QName.get("case", ns));
             case1.addAttribute("name", name);
-            addTests(case1,c);
+            addTests(case1, c);
 
         }
 

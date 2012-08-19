@@ -7,7 +7,6 @@ package org.jboss.rusheye.parser;
 import com.ctc.wstx.exc.WstxParsingException;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -161,6 +160,9 @@ public class ManagerParser extends Parser implements Observed {
 
     }
 
+    /**
+     * Creates instance of VisualSuite based on input xml file.
+     */
     public VisualSuite loadSuite(File file) {
         VisualSuite visualSuite = null;
         try {
@@ -227,6 +229,10 @@ public class ManagerParser extends Parser implements Observed {
         return visualSuite;
     }
 
+    /**
+     * Loads results from result descriptor into current project VisualSuite
+     * instance. Changes are reflected immediately in project tree.
+     */
     public void loadResults(File file) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
@@ -247,7 +253,7 @@ public class ManagerParser extends Parser implements Observed {
 
                     NodeList tests = case1.getElementsByTagName("test");
                     System.out.println(tests.getLength());
-                    
+
                     if (tests != null && tests.getLength() > 0) {
                         for (int k = 0; k < tests.getLength(); k++) {
                             Element test = (Element) tests.item(k);
@@ -258,8 +264,8 @@ public class ManagerParser extends Parser implements Observed {
                             if (patterns != null && patterns.getLength() > 0) {
                                 for (int l = 0; l < patterns.getLength(); l++) {
                                     Element pattern = (Element) patterns.item(l);
-                                    
-                                    System.out.println(case1.getAttribute("name") + " " +test.getAttribute("name") + " " + pattern.getAttribute("name") + " "+ pattern.getAttribute("result"));
+
+                                    System.out.println(case1.getAttribute("name") + " " + test.getAttribute("name") + " " + pattern.getAttribute("name") + " " + pattern.getAttribute("result"));
                                     TestCase tc = Main.mainProject.findTest(case1.getAttribute("name"), test.getAttribute("name"), pattern.getAttribute("name"));
                                     tc.setConclusion(ResultConclusion.valueOf(pattern.getAttribute("result")));
                                 }
@@ -276,10 +282,14 @@ public class ManagerParser extends Parser implements Observed {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        
+
         notifyObservers();
     }
 
+    /**
+     * Creates TestCase tree that represents VisualSuite. Returned TestCase can
+     * be used in JTree to represent suite in ProjectManagerFrame.
+     */
     public TestCase parseSuiteToManagerCases(VisualSuite suite) {
         statistics = new RushEyeStatistics();
         TestCase root = new TestCase();

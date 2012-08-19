@@ -5,13 +5,11 @@
 package org.jboss.rusheye.manager.project;
 
 import java.io.*;
-import javax.swing.JOptionPane;
 import org.jboss.rusheye.manager.Main;
 import org.jboss.rusheye.manager.exception.ManagerException;
 import org.jboss.rusheye.manager.gui.charts.RushEyeStatistics;
 import org.jboss.rusheye.manager.project.observable.Observed;
 import org.jboss.rusheye.parser.ManagerParser;
-import org.jboss.rusheye.parser.ManagerSaver;
 import org.jboss.rusheye.parser.ParserThread;
 import org.jboss.rusheye.suite.Properties;
 
@@ -121,6 +119,9 @@ public class Project extends ProjectBase {
         Main.interfaceFrame.getStatFrame().update(this);
     }
 
+    /**
+     * Runs parsing of this project.
+     */
     public void parse() throws ManagerException {
         Properties props = new Properties();
 

@@ -12,9 +12,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.jboss.rusheye.manager.gui.view.BottomMenu;
-import org.jboss.rusheye.manager.gui.view.image.listeners.ManagerMouseListener;
-import org.jboss.rusheye.manager.gui.view.image.listeners.ScrollAdjustmentListener;
 import org.jboss.rusheye.manager.gui.view.image.listeners.DragZoomMouseListener;
+import org.jboss.rusheye.manager.gui.view.image.listeners.ScrollAdjustmentListener;
 import org.jboss.rusheye.manager.project.TestCase;
 import org.jboss.rusheye.manager.utils.ImageUtils;
 

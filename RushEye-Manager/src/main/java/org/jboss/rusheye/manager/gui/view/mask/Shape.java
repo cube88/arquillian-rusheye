@@ -7,10 +7,11 @@ package org.jboss.rusheye.manager.gui.view.mask;
 import java.awt.Graphics;
 
 /**
+ * Shape interface for drawing masks in manager.
  *
- * @author cube
+ * @author Jakub D.
  */
 public interface Shape {
 
-    public void draw(Graphics g,double scale);
+    public void draw(Graphics g, double scale);
 }

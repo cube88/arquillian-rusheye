@@ -4,18 +4,15 @@
  */
 package org.jboss.rusheye.manager.gui.view.image.listeners;
 
-import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import org.jboss.rusheye.manager.Main;
 import org.jboss.rusheye.manager.gui.view.image.ImageView;
 
 /**
+ * Mouse listener that enables zooming on mouse wheel movement.
  *
- * @author cube
+ * @author Jakub D.
  */
 public class ZoomListener extends ManagerMouseListener implements MouseWheelListener {
 
@@ -55,7 +52,7 @@ public class ZoomListener extends ManagerMouseListener implements MouseWheelList
                 px = px2 * xMax;
                 py = py2 * yMax;
 
-                parent.getPicture().scrollRectToVisible( new Rectangle((int) (px - mwe.getX()), (int) (py - mwe.getY()), visible.width, visible.height));
+                parent.getPicture().scrollRectToVisible(new Rectangle((int) (px - mwe.getX()), (int) (py - mwe.getY()), visible.width, visible.height));
             }
         }
     }

@@ -12,8 +12,10 @@ import org.jboss.rusheye.manager.project.Project;
 import org.jboss.rusheye.manager.utils.FileChooserUtils;
 
 /**
+ * Wizard opened when we want to load suite. It allows us to choose all
+ * necessary options.
  *
- * @author hcube
+ * @author Jakub D.
  */
 public class WizardFrame extends javax.swing.JFrame {
 
@@ -216,23 +218,23 @@ public class WizardFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_masksButtonActionPerformed
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
-        if (suiteField.getText().equals("")){
+        if (suiteField.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "No suite selected", "Crawl", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+
         Project project = Project.projectFromDescriptor(suiteField.getText());
         project.setPatternPath(patternsField.getText());
         project.setSamplesPath(samplesField.getText());
         project.setMaskPath(masksField.getText());
         Main.mainProject = project;
-        
-        
-        if(!resultsField.getText().equals(""))
+
+
+        if (!resultsField.getText().equals(""))
             project.getParser().loadResults(new File(resultsField.getText()));
-        
+
         Main.interfaceFrame.initialize(project);
-        
+
         this.dispose();
     }//GEN-LAST:event_loadButtonActionPerformed
 
@@ -243,7 +245,6 @@ public class WizardFrame extends javax.swing.JFrame {
             resultsField.setText(tmp.getAbsolutePath());
         }
     }//GEN-LAST:event_resultButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

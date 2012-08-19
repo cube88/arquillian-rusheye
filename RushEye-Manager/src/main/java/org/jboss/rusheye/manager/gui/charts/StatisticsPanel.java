@@ -10,8 +10,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 /**
- *
- * @author hcube
+ * JPanel where image with chart is displayed.
+ * @author Jakub D.
  */
 public class StatisticsPanel extends JPanel {
 

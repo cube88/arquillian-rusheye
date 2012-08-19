@@ -42,16 +42,15 @@ public class InterfaceFrame extends javax.swing.JFrame {
         statFrame = new StatisticsFrame();
         statFrame.setVisible(false);
     }
-    
-    public void initialize(Project project){
+
+    public void initialize(Project project) {
         projectFrame.createTree();
         projectFrame.createMaskTree();
         projectFrame.createMaskList();
         clean();
-        
+
         project.updateFrames();
     }
-
 
     public JPanel getMainPanel() {
         return mainPanel;
@@ -76,7 +75,7 @@ public class InterfaceFrame extends javax.swing.JFrame {
     /**
      * Opens JFileChooser and allows to set path for patterns in project.
      *
-     * @return File reference returned by JFileCHooser
+     * @return File reference returned by JFileChooser
      */
     public File setPatternsAction() {
         File dir = FileChooserUtils.openDir("Open Pattern Dir", this);
@@ -92,7 +91,7 @@ public class InterfaceFrame extends javax.swing.JFrame {
     /**
      * Opens JFileChooser and allows to set path for samples in project.
      *
-     * @return File reference returned by JFileCHooser
+     * @return File reference returned by JFileChooser
      */
     public File setSamplesAction() {
         File dir = FileChooserUtils.openDir("Open Samples Dir", this);
@@ -105,6 +104,11 @@ public class InterfaceFrame extends javax.swing.JFrame {
         return dir;
     }
 
+    /**
+     * Opens JFileChooser and allows to set path for masks in project.
+     *
+     * @return File reference returned by JFileChooser
+     */
     public File setMasksAction() {
         File dir = FileChooserUtils.openDir("Open Mask Dir", this);
         if (dir != null) {
@@ -348,13 +352,21 @@ public class InterfaceFrame extends javax.swing.JFrame {
             Main.mainProject.loadResultAsString();
         }
     }//GEN-LAST:event_resultLoadMenuItemActionPerformed
-
+    /**
+     * Changes view to mask view.
+     *
+     * @param evt event triggering method
+     */
     private void maskViewMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maskViewMenuItemActionPerformed
         view = InterfaceFrame.MASK;
         projectFrame.putTestIntoView();
         projectFrame.createMaskTree();
     }//GEN-LAST:event_maskViewMenuItemActionPerformed
-
+    /**
+     * Displays statistics frame.
+     *
+     * @param evt event triggering method
+     */
     private void statisticsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statisticsMenuItemActionPerformed
         statFrame.setVisible(true);
     }//GEN-LAST:event_statisticsMenuItemActionPerformed
@@ -384,8 +396,7 @@ public class InterfaceFrame extends javax.swing.JFrame {
                 if (destination != null) {
                     destination.close();
                 }
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

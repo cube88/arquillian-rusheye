@@ -5,9 +5,11 @@
 package org.jboss.rusheye.manager.gui.view.mask;
 
 /**
+ * Type of manager mask.
  *
- * @author hcube
+ * @author Jakub D.
  */
 public enum ManagerMaskType {
+
     SELECTIVE_ALPHA;
 }

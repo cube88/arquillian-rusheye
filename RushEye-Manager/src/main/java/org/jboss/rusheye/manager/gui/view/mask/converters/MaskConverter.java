@@ -8,8 +8,8 @@ import java.io.File;
 import org.jboss.rusheye.manager.gui.view.mask.MaskCase;
 
 /**
- *
- * @author hcube
+ * Abstract class for manager masks conversion into RushEye masks.
+ * @author Jakub D.
  */
 public abstract class MaskConverter {
 

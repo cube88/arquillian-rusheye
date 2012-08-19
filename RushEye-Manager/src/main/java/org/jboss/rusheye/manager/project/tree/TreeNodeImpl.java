@@ -26,18 +26,22 @@ public class TreeNodeImpl implements TreeNode, Comparable<TreeNodeImpl> {
         children = new NodeList();
     }
 
+    @Override
     public TreeNode getChildAt(int i) {
         return visibleChildren().get(i);
     }
 
+    @Override
     public int getChildCount() {
         return visibleChildren().size();
     }
 
+    @Override
     public TreeNode getParent() {
         return parent;
     }
 
+    @Override
     public int getIndex(TreeNode tn) {
         for (int i = 0; i < visibleChildren().size(); ++i) {
             if (tn instanceof TreeNodeImpl) {
@@ -50,10 +54,12 @@ public class TreeNodeImpl implements TreeNode, Comparable<TreeNodeImpl> {
         return -1;
     }
 
+    @Override
     public boolean getAllowsChildren() {
         return allowsChildren;
     }
 
+    @Override
     public boolean isLeaf() {
         if (visibleChildren().isEmpty()) {
             return true;

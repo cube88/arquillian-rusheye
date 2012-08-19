@@ -8,8 +8,10 @@ import java.util.*;
 import org.jboss.rusheye.suite.ResultConclusion;
 
 /**
+ * Statistics for tests. For every ResultConclusion type it holds amount of
+ * tests having that result.
  *
- * @author hcube
+ * @author Jakub D.
  */
 public class RushEyeStatistics {
 
@@ -46,6 +48,9 @@ public class RushEyeStatistics {
         return result;
     }
 
+    /**
+     * Returns sum of all statistics. Used for y scale in chart.
+     */
     public synchronized int calculateSum() {
         int result = 0;
         Iterator it = map.values().iterator();

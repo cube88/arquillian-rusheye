@@ -5,13 +5,13 @@
 package org.jboss.rusheye.manager.gui.view;
 
 import javax.swing.JPanel;
-import org.jboss.rusheye.manager.gui.view.image.ImagePool;
 import org.jboss.rusheye.manager.gui.view.image.DrawableImageView;
+import org.jboss.rusheye.manager.gui.view.image.ImagePool;
 import org.jboss.rusheye.manager.project.TestCase;
 
 /**
- *
- * @author cube
+ * View where we can draw and see masks.
+ * @author Jakub D.
  */
 public class MaskView extends JPanel {
 

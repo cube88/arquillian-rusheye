@@ -24,6 +24,7 @@ public class ScrollAdjustmentListener implements AdjustmentListener {
         otherView = other;
     }
 
+    @Override
     public void adjustmentValueChanged(AdjustmentEvent ae) {
         otherView.getPicture().scrollRectToVisible(parentView.getPicture().getVisibleRect());
     }

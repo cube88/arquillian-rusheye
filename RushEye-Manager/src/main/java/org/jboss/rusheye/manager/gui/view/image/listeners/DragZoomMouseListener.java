@@ -71,6 +71,7 @@ public class DragZoomMouseListener extends ZoomListener implements MouseMotionLi
         }
     }
 
+    @Override
     public void mouseMoved(MouseEvent me) {
     }
 }
